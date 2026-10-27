@@ -62,7 +62,7 @@ def sha256_file(path: Path) -> str:
 def curl(url: str, out: Path, *, extra: list[str] | None = None, timeout: int = 600) -> None:
     """Download ``url`` to ``out`` with curl (which honours HTTPS_PROXY and the CA bundle)."""
     out.parent.mkdir(parents=True, exist_ok=True)
-    cmd = ["curl", "-sS", "-L", "--fail", "--max-time", str(timeout), "-A", CURL_UA, "-o", str(out), url]
+    cmd = ["curl", "-sS", "-L", "--fail", "--max-time", str(timeout), "-o", str(out), url]
     if extra:
         cmd[1:1] = extra
     subprocess.run(cmd, check=True)

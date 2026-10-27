@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reciprocal deposits, large US banks, Q2 2026</title>
+<style>
+:root { color-scheme: light; --surface:#fcfcfb; --page:#f9f9f7; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --series:#2a78d6; --accent:#eb6834; --hl:#fff3ec; --border:rgba(11,11,11,0.10); }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--page); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; font-size: 14px; line-height: 1.45; }
+main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 48px; }
+header h1 { font-size: 24px; margin: 0 0 4px; font-weight: 650; letter-spacing: -0.01em; }
+header .sub { color: var(--ink2); margin: 0 0 18px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin: 0 0 18px; }
+.headline { font-size: 16px; }
+.headline strong { font-size: 28px; font-weight: 700; }
+.kpis { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 10px; }
+.kpi .label { color: var(--ink2); font-size: 12px; }
+.kpi .value { font-size: 22px; font-weight: 650; }
+h2 { font-size: 17px; margin: 0 0 10px; font-weight: 650; }
+h3 { font-size: 14px; margin: 14px 0 4px; }
+.hint { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; white-space: nowrap; }
+th { text-align: right; font-weight: 600; color: var(--ink2); font-size: 12px; position: sticky; top: 0; background: var(--surface); }
+th:first-child { text-align: left; }
+th button { all: unset; cursor: pointer; }
+th button:hover { color: var(--ink); text-decoration: underline; }
+th[aria-sort="ascending"] button::after { content: " \25B2"; font-size: 9px; }
+th[aria-sort="descending"] button::after { content: " \25BC"; font-size: 9px; }
+td.num { text-align: right; }
+td.txt { white-space: normal; max-width: 160px; color: var(--ink2); }
+td .hc { font-weight: 600; }
+td .cat { color: var(--muted); font-size: 11px; }
+tr.hl td { background: var(--hl); }
+tr.hl td .hc::after { content: " \25C6"; color: var(--accent); font-size: 10px; }
+tbody tr:hover td { background: #f3f3ef; }
+tbody tr.hl:hover td { background: #ffe9db; }
+.legend { color: var(--ink2); font-size: 12px; margin: 4px 0 0; }
+.legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+svg.chart { display: block; height: auto; font-family: inherit; }
+svg.chart text { fill: var(--ink2); font-size: 12px; }
+svg.chart text.tick { fill: var(--muted); font-size: 11px; }
+svg.chart text.cat { fill: var(--ink); }
+svg.chart text.hlcat { font-weight: 650; }
+svg.chart text.val { fill: var(--ink2); font-size: 11.5px; }
+svg.chart text.zero { fill: var(--muted); }
+svg.chart g.bar:hover path { filter: brightness(1.12); }
+.notes ul { margin: 0 0 6px 18px; padding: 0; }
+.notes li { margin: 0 0 6px; }
+.notes a { color: #1c5cab; word-break: break-all; }
+footer { color: var(--muted); font-size: 12px; margin-top: 12px; }
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  html, body { background: #fff; font-size: 10.5px; }
+  main { max-width: none; padding: 0; }
+  .card { border: none; padding: 0; margin: 0 0 10px; break-inside: avoid; }
+  .tablewrap { overflow: visible; }
+  th { position: static; }
+  th button::after { content: "" !important; }
+  .hint, .noprint { display: none; }
+  tr { break-inside: avoid; }
+  svg.chart { max-height: 95vh; }
+  .notes { break-before: page; }
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Reciprocal deposits at large US banks — 6/30/2026</h1>
+<p class="sub">Call Report sizing for the NSFR-disclosing holding companies (Category I–III and Category IV with ≥ $50bn weighted short-term wholesale funding), with the NSFR sweep/reciprocal/brokered line (row 7) as context. Built 2026-10-27; self-contained, works offline.</p>
+</header>
+
+<section class="card headline">
+<p style="margin:0">Across the 24 holding companies with insured bank subsidiaries, reciprocal deposits totalled <strong>$36.7bn</strong> at 6/30/2026 (0.27% of their $13.7tn of deposits; 13 of 24 report any). Top 3 by $: Huntington $9.2bn, RBC US Group Holdings (City National) $7.4bn, UBS Americas Holding $4.5bn. Top 3 by % of deposits: RBC US Group Holdings (City National) 8.19%, UBS Americas Holding 4.08%, Huntington 4.05%.</p>
+<div class="kpis">
+  <div class="kpi"><div class="label">Total reciprocal deposits (call report, sum of insured subs)</div><div class="value">$36.7bn</div></div>
+  <div class="kpi"><div class="label">Share of the set’s total deposits</div><div class="value">0.27%</div></div>
+  <div class="kpi"><div class="label">Holding companies reporting any reciprocal deposits</div><div class="value">13 of 24</div></div>
+  <div class="kpi"><div class="label">Q1–Q2 2026 NSFR disclosures located</div><div class="value">2 of 2</div></div>
+</div>
+</section>
+
+<section class="card">
+<h2>Holding-company summary</h2>
+<p class="hint">Click a column header to sort. Hover a header for the item definition. Dollar columns in $bn; call report items are point-in-time at 6/30/2026 and summed over each firm’s FDIC-insured bank subsidiaries; the NSFR columns are consolidated holding-company quarterly averages and the row-7 line is a bundle (sweep + brokered reciprocal + retail brokered), not reciprocal deposits. Highlighted row: RBC US Group Holdings / City National Bank.</p>
+<div class="tablewrap"><table id="summary"><thead><tr><th data-kind="text" title="Holding company (category in grey)"><button type="button">Holding company</button></th><th data-kind="num" title="Number of active FDIC-insured depository subsidiaries (FDIC BankFind)"><button type="button">Banks</button></th><th data-kind="bn" title="Total reciprocal deposits, RC-E M.1.g (RCONJH83), sum of insured subs, 6/30/2026"><button type="button">Reciprocal $bn</button></th><th data-kind="pct" title="Reciprocal deposits / total deposits incl. foreign offices"><button type="button">% of deposits</button></th><th data-kind="num" title="Rank on reciprocal $"><button type="button">Rank $</button></th><th data-kind="num" title="Rank on reciprocal % of deposits"><button type="button">Rank %</button></th><th data-kind="bn" title="Reciprocal brokered deposits, RC-O item 9 (RCONG803)"><button type="button">Brokered recip. $bn</button></th><th data-kind="pct" title="RC-O item 9 as % of total reciprocal deposits"><button type="button">% of recip.</button></th><th data-kind="bn" title="Total brokered deposits, RC-E M.1.b (RCON2365)"><button type="button">Total brokered $bn</button></th><th data-kind="pct" title="Total brokered deposits / total deposits"><button type="button">Brokered % dep.</button></th><th data-kind="bn" title="Total deposits incl. foreign offices (RCON2200 + RCFN2200)"><button type="button">Deposits $bn</button></th><th data-kind="bn" title="NSFR sweep/reciprocal/brokered (row 7): unweighted total, Q2 2026 average (holding company, consolidated)"><button type="button">NSFR row 7 unw. $bn</button></th><th data-kind="pct" title="NSFR row 7 unweighted total as % of total retail funding (unweighted), Q2 2026 average"><button type="button">Row 7 % retail</button></th><th data-kind="ratio" title="Reported NSFR, Q2 2026 quarterly average"><button type="button">NSFR Q2</button></th><th data-kind="text" title="Q1-Q2 2026 NSFR public disclosure status"><button type="button">NSFR disclosure</button></th></tr></thead><tbody><tr><td data-v="JPMorgan Chase"><div class="hc">JPMorgan Chase</div><div class="cat">I</div></td><td data-v="2.0" class="num">2</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="14.0" class="num">14</td><td data-v="14.0" class="num">14</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="54909.0" class="num">54.91</td><td data-v="1.947" class="num">1.95%</td><td data-v="2820284.5" class="num">2,820.28</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Bank of America"><div class="hc">Bank of America</div><div class="cat">I</div></td><td data-v="2.0" class="num">2</td><td data-v="578.0" class="num">0.58</td><td data-v="0.027" class="num">0.03%</td><td data-v="9.0" class="num">9</td><td data-v="13.0" class="num">13</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="83039.0" class="num">83.04</td><td data-v="3.891" class="num">3.89%</td><td data-v="2134110.0" class="num">2,134.11</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Citigroup"><div class="hc">Citigroup</div><div class="cat">I</div></td><td data-v="1.0" class="num">1</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="15.0" class="num">15</td><td data-v="15.0" class="num">15</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="55425.0" class="num">55.42</td><td data-v="3.581" class="num">3.58%</td><td data-v="1547586.0" class="num">1,547.59</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Wells Fargo"><div class="hc">Wells Fargo</div><div class="cat">I</div></td><td data-v="3.0" class="num">3</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="16.0" class="num">16</td><td data-v="16.0" class="num">16</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="151509.0" class="num">151.51</td><td data-v="9.637" class="num">9.64%</td><td data-v="1572140.884" class="num">1,572.14</td><td data-v="189100.0" class="num">189.10</td><td data-v="19.19" class="num">19.19%</td><td data-v="122.0" class="num">122%</td><td data-v="found" class="txt">found</td></tr><tr><td data-v="Goldman Sachs"><div class="hc">Goldman Sachs</div><div class="cat">I</div></td><td data-v="1.0" class="num">1</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="17.0" class="num">17</td><td data-v="17.0" class="num">17</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="103783.0" class="num">103.78</td><td data-v="20.806" class="num">20.81%</td><td data-v="498804.0" class="num">498.80</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Morgan Stanley"><div class="hc">Morgan Stanley</div><div class="cat">I</div></td><td data-v="2.0" class="num">2</td><td data-v="3700.0" class="num">3.70</td><td data-v="0.754" class="num">0.75%</td><td data-v="5.0" class="num">5</td><td data-v="6.0" class="num">6</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="117048.0" class="num">117.05</td><td data-v="23.858" class="num">23.86%</td><td data-v="490605.0" class="num">490.61</td><td data-v="239615.0" class="num">239.62</td><td data-v="58.778" class="num">58.78%</td><td data-v="116.0" class="num">116%</td><td data-v="found" class="txt">found</td></tr><tr><td data-v="BNY"><div class="hc">BNY</div><div class="cat">I</div></td><td data-v="4.0" class="num">4</td><td data-v="214.0" class="num">0.21</td><td data-v="0.054" class="num">0.05%</td><td data-v="12.0" class="num">12</td><td data-v="11.0" class="num">11</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="21313.0" class="num">21.31</td><td data-v="5.345" class="num">5.34%</td><td data-v="398734.733" class="num">398.73</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="State Street"><div class="hc">State Street</div><div class="cat">I</div></td><td data-v="1.0" class="num">1</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="18.0" class="num">18</td><td data-v="18.0" class="num">18</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="14835.0" class="num">14.84</td><td data-v="4.547" class="num">4.55%</td><td data-v="326247.0" class="num">326.25</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Northern Trust"><div class="hc">Northern Trust</div><div class="cat">II</div></td><td data-v="1.0" class="num">1</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="19.0" class="num">19</td><td data-v="19.0" class="num">19</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="148110.314" class="num">148.11</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="American Express"><div class="hc">American Express</div><div class="cat">II (from Q2 2026)</div></td><td data-v="1.0" class="num">1</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="20.0" class="num">20</td><td data-v="20.0" class="num">20</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="23580.53" class="num">23.58</td><td data-v="13.745" class="num">13.74%</td><td data-v="171554.868" class="num">171.55</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="U.S. Bancorp"><div class="hc">U.S. Bancorp</div><div class="cat">III</div></td><td data-v="1.0" class="num">1</td><td data-v="3771.684" class="num">3.77</td><td data-v="0.696" class="num">0.70%</td><td data-v="4.0" class="num">4</td><td data-v="7.0" class="num">7</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="32999.966" class="num">33.00</td><td data-v="6.09" class="num">6.09%</td><td data-v="541886.374" class="num">541.89</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="PNC"><div class="hc">PNC</div><div class="cat">III</div></td><td data-v="1.0" class="num">1</td><td data-v="428.83" class="num">0.43</td><td data-v="0.094" class="num">0.09%</td><td data-v="10.0" class="num">10</td><td data-v="10.0" class="num">10</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="2056.844" class="num">2.06</td><td data-v="0.449" class="num">0.45%</td><td data-v="457798.362" class="num">457.80</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Truist"><div class="hc">Truist</div><div class="cat">III</div></td><td data-v="1.0" class="num">1</td><td data-v="2543.0" class="num">2.54</td><td data-v="0.607" class="num">0.61%</td><td data-v="7.0" class="num">7</td><td data-v="8.0" class="num">8</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="26812.0" class="num">26.81</td><td data-v="6.396" class="num">6.40%</td><td data-v="419212.0" class="num">419.21</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Capital One"><div class="hc">Capital One</div><div class="cat">III</div></td><td data-v="1.0" class="num">1</td><td data-v="1075.0" class="num">1.07</td><td data-v="0.21" class="num">0.21%</td><td data-v="8.0" class="num">8</td><td data-v="9.0" class="num">9</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="16767.0" class="num">16.77</td><td data-v="3.271" class="num">3.27%</td><td data-v="512600.0" class="num">512.60</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Charles Schwab"><div class="hc">Charles Schwab</div><div class="cat">III</div></td><td data-v="3.0" class="num">3</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="21.0" class="num">21</td><td data-v="21.0" class="num">21</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="7625.0" class="num">7.62</td><td data-v="2.94" class="num">2.94%</td><td data-v="259380.383" class="num">259.38</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Fifth Third"><div class="hc">Fifth Third</div><div class="cat">III (from Q2 2026)</div></td><td data-v="1.0" class="num">1</td><td data-v="3060.0" class="num">3.06</td><td data-v="1.27" class="num">1.27%</td><td data-v="6.0" class="num">6</td><td data-v="4.0" class="num">4</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="1683.0" class="num">1.68</td><td data-v="0.699" class="num">0.70%</td><td data-v="240928.0" class="num">240.93</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Huntington"><div class="hc">Huntington</div><div class="cat">III (transitioning late 2026)</div></td><td data-v="1.0" class="num">1</td><td data-v="9189.232" class="num">9.19</td><td data-v="4.046" class="num">4.05%</td><td data-v="1.0" class="num">1</td><td data-v="3.0" class="num">3</td><td data-v="4189.232" class="num">4.19</td><td data-v="45.588" class="num">45.59%</td><td data-v="9953.39" class="num">9.95</td><td data-v="4.382" class="num">4.38%</td><td data-v="227123.103" class="num">227.12</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="Barclays US LLC"><div class="hc">Barclays US LLC</div><div class="cat">III IHC</div></td><td data-v="1.0" class="num">1</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="22.0" class="num">22</td><td data-v="22.0" class="num">22</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="5488.0" class="num">5.49</td><td data-v="15.54" class="num">15.54%</td><td data-v="35315.0" class="num">35.31</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="DB USA Corp"><div class="hc">DB USA Corp</div><div class="cat">III IHC</div></td><td data-v="2.0" class="num">2</td><td data-v="274.0" class="num">0.27</td><td data-v="0.973" class="num">0.97%</td><td data-v="11.0" class="num">11</td><td data-v="5.0" class="num">5</td><td data-v="274.0" class="num">0.27</td><td data-v="100.0" class="num">100.00%</td><td data-v="1763.0" class="num">1.76</td><td data-v="6.263" class="num">6.26%</td><td data-v="28149.018" class="num">28.15</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="TD Group US Holdings"><div class="hc">TD Group US Holdings</div><div class="cat">III IHC</div></td><td data-v="2.0" class="num">2</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="23.0" class="num">23</td><td data-v="23.0" class="num">23</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="6593.318" class="num">6.59</td><td data-v="2.163" class="num">2.16%</td><td data-v="304846.623" class="num">304.85</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="UBS Americas Holding"><div class="hc">UBS Americas Holding</div><div class="cat">III IHC</div></td><td data-v="1.0" class="num">1</td><td data-v="4456.213" class="num">4.46</td><td data-v="4.076" class="num">4.08%</td><td data-v="3.0" class="num">3</td><td data-v="2.0" class="num">2</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="31401.707" class="num">31.40</td><td data-v="28.723" class="num">28.72%</td><td data-v="109326.784" class="num">109.33</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="BMO Financial Corp"><div class="hc">BMO Financial Corp</div><div class="cat">IV (&gt;= $50B wSTWF)</div></td><td data-v="2.0" class="num">2</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="24.0" class="num">24</td><td data-v="24.0" class="num">24</td><td data-v="0.0" class="num">0.00</td><td data-v="-1" class="num">–</td><td data-v="6186.552" class="num">6.19</td><td data-v="3.187" class="num">3.19%</td><td data-v="194141.429" class="num">194.14</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="HSBC North America Holdings"><div class="hc">HSBC North America Holdings</div><div class="cat">IV (&gt;= $50B wSTWF)</div></td><td data-v="2.0" class="num">2</td><td data-v="57.389" class="num">0.06</td><td data-v="0.041" class="num">0.04%</td><td data-v="13.0" class="num">13</td><td data-v="12.0" class="num">12</td><td data-v="0.0" class="num">0.00</td><td data-v="0.0" class="num">0.00%</td><td data-v="21886.456" class="num">21.89</td><td data-v="15.501" class="num">15.50%</td><td data-v="141193.098" class="num">141.19</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr class="hl"><td data-v="RBC US Group Holdings"><div class="hc">RBC US Group Holdings (City National)</div><div class="cat">III or IV (verify)</div></td><td data-v="2.0" class="num">2</td><td data-v="7378.226" class="num">7.38</td><td data-v="8.194" class="num">8.19%</td><td data-v="2.0" class="num">2</td><td data-v="1.0" class="num">1</td><td data-v="7378.226" class="num">7.38</td><td data-v="100.0" class="num">100.00%</td><td data-v="12755.399" class="num">12.76</td><td data-v="14.165" class="num">14.16%</td><td data-v="90046.273" class="num">90.05</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr><tr><td data-v="DWS USA Corp"><div class="hc">DWS USA Corp</div><div class="cat">III IHC (verify)</div></td><td data-v="0.0" class="num">0</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="-1" class="num">–</td><td data-v="not found" class="txt">not found</td></tr></tbody></table></div>
+</section>
+
+<section class="card">
+<h2>Reciprocal deposits, $bn (RC-E M.1.g, sum of insured subs, 6/30/2026)</h2>
+<svg class="chart" id="c1" viewBox="0 0 960 590" width="100%" role="img" aria-labelledby="c1-t">
+<title id="c1-t">Reciprocal deposits by holding company, $bn, 6/30/2026</title>
+<line x1="250.0" y1="28" x2="250.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="250.0" y="582" text-anchor="middle" class="tick">0</text>
+<line x1="374.0" y1="28" x2="374.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="374.0" y="582" text-anchor="middle" class="tick">2000</text>
+<line x1="498.0" y1="28" x2="498.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="498.0" y="582" text-anchor="middle" class="tick">4000</text>
+<line x1="622.0" y1="28" x2="622.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="622.0" y="582" text-anchor="middle" class="tick">6000</text>
+<line x1="746.0" y1="28" x2="746.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="746.0" y="582" text-anchor="middle" class="tick">8000</text>
+<line x1="870.0" y1="28" x2="870.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="870.0" y="582" text-anchor="middle" class="tick">10000</text>
+<line x1="250" y1="28" x2="250" y2="566" stroke="#c3c2b7" stroke-width="1"/>
+<g class="bar"><title>Huntington: $9.19bn</title>
+<rect x="0" y="34" width="960" height="22" fill="transparent"/>
+<text x="240" y="49.0" text-anchor="end" class="cat">Huntington</text>
+<path d="M251.0,38.0 h565.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-565.7 z" fill="#2a78d6"/>
+<text x="826.7" y="49.0" class="val">$9.19bn</text>
+</g>
+<g class="bar hl"><title>RBC US Group Holdings (City National): $7.38bn</title>
+<rect x="0" y="56" width="960" height="22" fill="transparent"/>
+<text x="240" y="71.0" text-anchor="end" class="cat hlcat">RBC US Group Holdings (City National)</text>
+<path d="M251.0,60.0 h453.5 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-453.5 z" fill="#eb6834"/>
+<text x="714.5" y="71.0" class="val">$7.38bn</text>
+</g>
+<g class="bar"><title>UBS Americas Holding: $4.46bn</title>
+<rect x="0" y="78" width="960" height="22" fill="transparent"/>
+<text x="240" y="93.0" text-anchor="end" class="cat">UBS Americas Holding</text>
+<path d="M251.0,82.0 h272.3 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-272.3 z" fill="#2a78d6"/>
+<text x="533.3" y="93.0" class="val">$4.46bn</text>
+</g>
+<g class="bar"><title>U.S. Bancorp: $3.77bn</title>
+<rect x="0" y="100" width="960" height="22" fill="transparent"/>
+<text x="240" y="115.0" text-anchor="end" class="cat">U.S. Bancorp</text>
+<path d="M251.0,104.0 h229.8 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-229.8 z" fill="#2a78d6"/>
+<text x="490.8" y="115.0" class="val">$3.77bn</text>
+</g>
+<g class="bar"><title>Morgan Stanley: $3.70bn</title>
+<rect x="0" y="122" width="960" height="22" fill="transparent"/>
+<text x="240" y="137.0" text-anchor="end" class="cat">Morgan Stanley</text>
+<path d="M251.0,126.0 h225.4 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-225.4 z" fill="#2a78d6"/>
+<text x="486.4" y="137.0" class="val">$3.70bn</text>
+</g>
+<g class="bar"><title>Fifth Third: $3.06bn</title>
+<rect x="0" y="144" width="960" height="22" fill="transparent"/>
+<text x="240" y="159.0" text-anchor="end" class="cat">Fifth Third</text>
+<path d="M251.0,148.0 h185.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-185.7 z" fill="#2a78d6"/>
+<text x="446.7" y="159.0" class="val">$3.06bn</text>
+</g>
+<g class="bar"><title>Truist: $2.54bn</title>
+<rect x="0" y="166" width="960" height="22" fill="transparent"/>
+<text x="240" y="181.0" text-anchor="end" class="cat">Truist</text>
+<path d="M251.0,170.0 h153.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-153.7 z" fill="#2a78d6"/>
+<text x="414.7" y="181.0" class="val">$2.54bn</text>
+</g>
+<g class="bar"><title>Capital One: $1.07bn</title>
+<rect x="0" y="188" width="960" height="22" fill="transparent"/>
+<text x="240" y="203.0" text-anchor="end" class="cat">Capital One</text>
+<path d="M251.0,192.0 h62.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-62.7 z" fill="#2a78d6"/>
+<text x="323.6" y="203.0" class="val">$1.07bn</text>
+</g>
+<g class="bar"><title>Bank of America: $0.58bn</title>
+<rect x="0" y="210" width="960" height="22" fill="transparent"/>
+<text x="240" y="225.0" text-anchor="end" class="cat">Bank of America</text>
+<path d="M251.0,214.0 h31.8 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-31.8 z" fill="#2a78d6"/>
+<text x="292.8" y="225.0" class="val">$0.58bn</text>
+</g>
+<g class="bar"><title>PNC: $0.43bn</title>
+<rect x="0" y="232" width="960" height="22" fill="transparent"/>
+<text x="240" y="247.0" text-anchor="end" class="cat">PNC</text>
+<path d="M251.0,236.0 h22.6 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-22.6 z" fill="#2a78d6"/>
+<text x="283.6" y="247.0" class="val">$0.43bn</text>
+</g>
+<g class="bar"><title>DB USA Corp: $0.27bn</title>
+<rect x="0" y="254" width="960" height="22" fill="transparent"/>
+<text x="240" y="269.0" text-anchor="end" class="cat">DB USA Corp</text>
+<path d="M251.0,258.0 h13.0 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-13.0 z" fill="#2a78d6"/>
+<text x="274.0" y="269.0" class="val">$0.27bn</text>
+</g>
+<g class="bar"><title>BNY: $0.21bn</title>
+<rect x="0" y="276" width="960" height="22" fill="transparent"/>
+<text x="240" y="291.0" text-anchor="end" class="cat">BNY</text>
+<path d="M251.0,280.0 h9.3 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-9.3 z" fill="#2a78d6"/>
+<text x="270.3" y="291.0" class="val">$0.21bn</text>
+</g>
+<g class="bar"><title>HSBC North America Holdings: $0.06bn</title>
+<rect x="0" y="298" width="960" height="22" fill="transparent"/>
+<text x="240" y="313.0" text-anchor="end" class="cat">HSBC North America Holdings</text>
+<path d="M251.0,302.0 h1.8 a1.8,1.8 0 0 1 1.8,1.8 v10.4 a1.8,1.8 0 0 1 -1.8,1.8 h-1.8 z" fill="#2a78d6"/>
+<text x="260.6" y="313.0" class="val">$0.06bn</text>
+</g>
+<g class="bar"><title>JPMorgan Chase: $0.00bn</title>
+<rect x="0" y="320" width="960" height="22" fill="transparent"/>
+<text x="240" y="335.0" text-anchor="end" class="cat">JPMorgan Chase</text>
+<text x="256" y="335.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Citigroup: $0.00bn</title>
+<rect x="0" y="342" width="960" height="22" fill="transparent"/>
+<text x="240" y="357.0" text-anchor="end" class="cat">Citigroup</text>
+<text x="256" y="357.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Wells Fargo: $0.00bn</title>
+<rect x="0" y="364" width="960" height="22" fill="transparent"/>
+<text x="240" y="379.0" text-anchor="end" class="cat">Wells Fargo</text>
+<text x="256" y="379.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Goldman Sachs: $0.00bn</title>
+<rect x="0" y="386" width="960" height="22" fill="transparent"/>
+<text x="240" y="401.0" text-anchor="end" class="cat">Goldman Sachs</text>
+<text x="256" y="401.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>State Street: $0.00bn</title>
+<rect x="0" y="408" width="960" height="22" fill="transparent"/>
+<text x="240" y="423.0" text-anchor="end" class="cat">State Street</text>
+<text x="256" y="423.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Northern Trust: $0.00bn</title>
+<rect x="0" y="430" width="960" height="22" fill="transparent"/>
+<text x="240" y="445.0" text-anchor="end" class="cat">Northern Trust</text>
+<text x="256" y="445.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>American Express: $0.00bn</title>
+<rect x="0" y="452" width="960" height="22" fill="transparent"/>
+<text x="240" y="467.0" text-anchor="end" class="cat">American Express</text>
+<text x="256" y="467.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Charles Schwab: $0.00bn</title>
+<rect x="0" y="474" width="960" height="22" fill="transparent"/>
+<text x="240" y="489.0" text-anchor="end" class="cat">Charles Schwab</text>
+<text x="256" y="489.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Barclays US LLC: $0.00bn</title>
+<rect x="0" y="496" width="960" height="22" fill="transparent"/>
+<text x="240" y="511.0" text-anchor="end" class="cat">Barclays US LLC</text>
+<text x="256" y="511.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>TD Group US Holdings: $0.00bn</title>
+<rect x="0" y="518" width="960" height="22" fill="transparent"/>
+<text x="240" y="533.0" text-anchor="end" class="cat">TD Group US Holdings</text>
+<text x="256" y="533.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>BMO Financial Corp: $0.00bn</title>
+<rect x="0" y="540" width="960" height="22" fill="transparent"/>
+<text x="240" y="555.0" text-anchor="end" class="cat">BMO Financial Corp</text>
+<text x="256" y="555.0" class="val zero">0</text>
+</g>
+</svg>
+<p class="legend"><span class="sw" style="background:#2a78d6"></span>holding company &nbsp; <span class="sw" style="background:#eb6834"></span>RBC US Group Holdings (City National Bank), highlighted</p>
+</section>
+
+<section class="card">
+<h2>Reciprocal deposits as % of total deposits (6/30/2026)</h2>
+<svg class="chart" id="c2" viewBox="0 0 960 590" width="100%" role="img" aria-labelledby="c2-t">
+<title id="c2-t">Reciprocal deposits as % of total deposits, 6/30/2026</title>
+<line x1="250.0" y1="28" x2="250.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="250.0" y="582" text-anchor="middle" class="tick">0%</text>
+<line x1="374.0" y1="28" x2="374.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="374.0" y="582" text-anchor="middle" class="tick">2%</text>
+<line x1="498.0" y1="28" x2="498.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="498.0" y="582" text-anchor="middle" class="tick">4%</text>
+<line x1="622.0" y1="28" x2="622.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="622.0" y="582" text-anchor="middle" class="tick">6%</text>
+<line x1="746.0" y1="28" x2="746.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="746.0" y="582" text-anchor="middle" class="tick">8%</text>
+<line x1="870.0" y1="28" x2="870.0" y2="566" stroke="#e1e0d9" stroke-width="1"/>
+<text x="870.0" y="582" text-anchor="middle" class="tick">10%</text>
+<line x1="250" y1="28" x2="250" y2="566" stroke="#c3c2b7" stroke-width="1"/>
+<g class="bar hl"><title>RBC US Group Holdings (City National): 8.19%</title>
+<rect x="0" y="34" width="960" height="22" fill="transparent"/>
+<text x="240" y="49.0" text-anchor="end" class="cat hlcat">RBC US Group Holdings (City National)</text>
+<path d="M251.0,38.0 h504.0 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-504.0 z" fill="#eb6834"/>
+<text x="765.0" y="49.0" class="val">8.19%</text>
+</g>
+<g class="bar"><title>UBS Americas Holding: 4.08%</title>
+<rect x="0" y="56" width="960" height="22" fill="transparent"/>
+<text x="240" y="71.0" text-anchor="end" class="cat">UBS Americas Holding</text>
+<path d="M251.0,60.0 h248.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-248.7 z" fill="#2a78d6"/>
+<text x="509.7" y="71.0" class="val">4.08%</text>
+</g>
+<g class="bar"><title>Huntington: 4.05%</title>
+<rect x="0" y="78" width="960" height="22" fill="transparent"/>
+<text x="240" y="93.0" text-anchor="end" class="cat">Huntington</text>
+<path d="M251.0,82.0 h246.9 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-246.9 z" fill="#2a78d6"/>
+<text x="507.9" y="93.0" class="val">4.05%</text>
+</g>
+<g class="bar"><title>Fifth Third: 1.27%</title>
+<rect x="0" y="100" width="960" height="22" fill="transparent"/>
+<text x="240" y="115.0" text-anchor="end" class="cat">Fifth Third</text>
+<path d="M251.0,104.0 h74.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-74.7 z" fill="#2a78d6"/>
+<text x="335.7" y="115.0" class="val">1.27%</text>
+</g>
+<g class="bar"><title>DB USA Corp: 0.97%</title>
+<rect x="0" y="122" width="960" height="22" fill="transparent"/>
+<text x="240" y="137.0" text-anchor="end" class="cat">DB USA Corp</text>
+<path d="M251.0,126.0 h56.3 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-56.3 z" fill="#2a78d6"/>
+<text x="317.3" y="137.0" class="val">0.97%</text>
+</g>
+<g class="bar"><title>Morgan Stanley: 0.75%</title>
+<rect x="0" y="144" width="960" height="22" fill="transparent"/>
+<text x="240" y="159.0" text-anchor="end" class="cat">Morgan Stanley</text>
+<path d="M251.0,148.0 h42.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-42.7 z" fill="#2a78d6"/>
+<text x="303.7" y="159.0" class="val">0.75%</text>
+</g>
+<g class="bar"><title>U.S. Bancorp: 0.70%</title>
+<rect x="0" y="166" width="960" height="22" fill="transparent"/>
+<text x="240" y="181.0" text-anchor="end" class="cat">U.S. Bancorp</text>
+<path d="M251.0,170.0 h39.2 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-39.2 z" fill="#2a78d6"/>
+<text x="300.2" y="181.0" class="val">0.70%</text>
+</g>
+<g class="bar"><title>Truist: 0.61%</title>
+<rect x="0" y="188" width="960" height="22" fill="transparent"/>
+<text x="240" y="203.0" text-anchor="end" class="cat">Truist</text>
+<path d="M251.0,192.0 h33.6 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-33.6 z" fill="#2a78d6"/>
+<text x="294.6" y="203.0" class="val">0.61%</text>
+</g>
+<g class="bar"><title>Capital One: 0.21%</title>
+<rect x="0" y="210" width="960" height="22" fill="transparent"/>
+<text x="240" y="225.0" text-anchor="end" class="cat">Capital One</text>
+<path d="M251.0,214.0 h9.0 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-9.0 z" fill="#2a78d6"/>
+<text x="270.0" y="225.0" class="val">0.21%</text>
+</g>
+<g class="bar"><title>PNC: 0.09%</title>
+<rect x="0" y="232" width="960" height="22" fill="transparent"/>
+<text x="240" y="247.0" text-anchor="end" class="cat">PNC</text>
+<path d="M251.0,236.0 h2.9 a2.9,2.9 0 0 1 2.9,2.9 v8.2 a2.9,2.9 0 0 1 -2.9,2.9 h-2.9 z" fill="#2a78d6"/>
+<text x="262.8" y="247.0" class="val">0.09%</text>
+</g>
+<g class="bar"><title>BNY: 0.05%</title>
+<rect x="0" y="254" width="960" height="22" fill="transparent"/>
+<text x="240" y="269.0" text-anchor="end" class="cat">BNY</text>
+<path d="M251.0,258.0 h1.7 a1.7,1.7 0 0 1 1.7,1.7 v10.7 a1.7,1.7 0 0 1 -1.7,1.7 h-1.7 z" fill="#2a78d6"/>
+<text x="260.3" y="269.0" class="val">0.05%</text>
+</g>
+<g class="bar"><title>HSBC North America Holdings: 0.04%</title>
+<rect x="0" y="276" width="960" height="22" fill="transparent"/>
+<text x="240" y="291.0" text-anchor="end" class="cat">HSBC North America Holdings</text>
+<path d="M251.0,280.0 h1.3 a1.3,1.3 0 0 1 1.3,1.3 v11.5 a1.3,1.3 0 0 1 -1.3,1.3 h-1.3 z" fill="#2a78d6"/>
+<text x="259.5" y="291.0" class="val">0.04%</text>
+</g>
+<g class="bar"><title>Bank of America: 0.03%</title>
+<rect x="0" y="298" width="960" height="22" fill="transparent"/>
+<text x="240" y="313.0" text-anchor="end" class="cat">Bank of America</text>
+<path d="M251.0,302.0 h0.8 a0.8,0.8 0 0 1 0.8,0.8 v12.3 a0.8,0.8 0 0 1 -0.8,0.8 h-0.8 z" fill="#2a78d6"/>
+<text x="258.7" y="313.0" class="val">0.03%</text>
+</g>
+<g class="bar"><title>JPMorgan Chase: 0.00%</title>
+<rect x="0" y="320" width="960" height="22" fill="transparent"/>
+<text x="240" y="335.0" text-anchor="end" class="cat">JPMorgan Chase</text>
+<text x="256" y="335.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Citigroup: 0.00%</title>
+<rect x="0" y="342" width="960" height="22" fill="transparent"/>
+<text x="240" y="357.0" text-anchor="end" class="cat">Citigroup</text>
+<text x="256" y="357.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Wells Fargo: 0.00%</title>
+<rect x="0" y="364" width="960" height="22" fill="transparent"/>
+<text x="240" y="379.0" text-anchor="end" class="cat">Wells Fargo</text>
+<text x="256" y="379.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Goldman Sachs: 0.00%</title>
+<rect x="0" y="386" width="960" height="22" fill="transparent"/>
+<text x="240" y="401.0" text-anchor="end" class="cat">Goldman Sachs</text>
+<text x="256" y="401.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>State Street: 0.00%</title>
+<rect x="0" y="408" width="960" height="22" fill="transparent"/>
+<text x="240" y="423.0" text-anchor="end" class="cat">State Street</text>
+<text x="256" y="423.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Northern Trust: 0.00%</title>
+<rect x="0" y="430" width="960" height="22" fill="transparent"/>
+<text x="240" y="445.0" text-anchor="end" class="cat">Northern Trust</text>
+<text x="256" y="445.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>American Express: 0.00%</title>
+<rect x="0" y="452" width="960" height="22" fill="transparent"/>
+<text x="240" y="467.0" text-anchor="end" class="cat">American Express</text>
+<text x="256" y="467.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Charles Schwab: 0.00%</title>
+<rect x="0" y="474" width="960" height="22" fill="transparent"/>
+<text x="240" y="489.0" text-anchor="end" class="cat">Charles Schwab</text>
+<text x="256" y="489.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>Barclays US LLC: 0.00%</title>
+<rect x="0" y="496" width="960" height="22" fill="transparent"/>
+<text x="240" y="511.0" text-anchor="end" class="cat">Barclays US LLC</text>
+<text x="256" y="511.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>TD Group US Holdings: 0.00%</title>
+<rect x="0" y="518" width="960" height="22" fill="transparent"/>
+<text x="240" y="533.0" text-anchor="end" class="cat">TD Group US Holdings</text>
+<text x="256" y="533.0" class="val zero">0</text>
+</g>
+<g class="bar"><title>BMO Financial Corp: 0.00%</title>
+<rect x="0" y="540" width="960" height="22" fill="transparent"/>
+<text x="240" y="555.0" text-anchor="end" class="cat">BMO Financial Corp</text>
+<text x="256" y="555.0" class="val zero">0</text>
+</g>
+</svg>
+<p class="legend"><span class="sw" style="background:#2a78d6"></span>holding company &nbsp; <span class="sw" style="background:#eb6834"></span>RBC US Group Holdings (City National Bank), highlighted</p>
+</section>
+
+<section class="card notes">
+<h2>Notes</h2>
+<h3>Source definitions</h3><ul><li><strong>Reciprocal deposits (call report).</strong> Schedule RC-E, Memorandum item 1.g &quot;Total reciprocal deposits (as of the report date)&quot;, MDRM RCONJH83, from the FFIEC CDR bulk download &quot;Call Reports -- Single Period&quot; for 06/30/2026. Reciprocal deposits are deposits a bank receives through a deposit placement network in return for placing the same amount of its own customers&#x27; deposits at other network banks (section 29(i) of the FDI Act). Point in time, bank level, USD thousands as filed; summed to the holding company.</li><li><strong>Brokered reciprocal deposits (call report).</strong> Schedule RC-O, item 9 &quot;Reciprocal brokered deposits (included in Schedule RC-E, Memorandum item 1.b)&quot;, MDRM RCONG803: the part of reciprocal deposits that the bank reports as brokered because it exceeds, or the bank does not qualify for, the limited exception in 12 CFR 337.6(e). Item 9.a &quot;Fully consolidated reciprocal brokered deposits&quot; (RCONL190) is completed only by institutions that consolidate another insured depository institution; none of the banks in this set report it, so it is shown as not applicable rather than zero.</li><li><strong>Total brokered deposits (call report).</strong> Schedule RC-E, Memorandum item 1.b &quot;Total brokered deposits&quot;, MDRM RCON2365. Shown for context only.</li><li><strong>Total deposits and total assets (call report).</strong> Total deposits = Schedule RC item 13.a deposits in domestic offices (RCON2200) plus, for FFIEC 031 filers, item 13.b deposits in foreign offices, Edge and Agreement subsidiaries and IBFs (RCFN2200). Domestic-office deposits are also carried separately. Total assets = Schedule RC item 12 (RCFD2170 for FFIEC 031 filers, RCON2170 otherwise).</li><li><strong>NSFR sweep/reciprocal/brokered (row 7).</strong> Row 7 of the US NSFR public disclosure template (12 CFR 249.131(c)(1)(vii)): &quot;Sweep deposits, brokered reciprocal deposits, and brokered deposits provided by a retail customer or counterparty&quot;. Average unweighted amounts by residual maturity (open maturity, &lt; 6 months, 6 months to &lt; 1 year, &gt;= 1 year) and the average weighted amount, for the quarters ended March 31, 2026 and June 30, 2026, taken from each holding company&#x27;s semiannual NSFR disclosure PDF (file name and page number recorded in nsfr_detail). USD millions.</li></ul><h3>NSFR bundling caveat</h3><ul><li><strong>Row 7 is a bundle - not a reciprocal number.</strong> The NSFR line bundles three things: affiliate and non-affiliate sweep deposits, brokered reciprocal deposits, and other brokered deposits provided by retail customers. Most of it at wealth-management firms is sweep balances. It is labelled &quot;NSFR sweep/reciprocal/brokered (row 7)&quot; everywhere in this repo and must never be read as reciprocal deposits. It also sits on a different basis (consolidated holding company, quarterly average) from the call report figure (insured banks, period end).</li></ul><h3>Point in time vs quarterly average</h3><ul><li><strong>Call report (point in time) vs NSFR (quarterly average).</strong> Call report items are balances as of the 6/30/2026 report date. NSFR disclosure amounts are averages of daily (or, for some firms, more frequent) calculations over the quarter. The two are not directly comparable and are shown side by side only as context; no ratio in this repo mixes a call-report numerator with an NSFR denominator or vice versa.</li></ul><h3>Scope</h3><ul><li><strong>Holding company vs bank level.</strong> Call report figures are summed over every active FDIC-insured depository institution whose regulatory top holder (FDIC BankFind field RSSDHCR) is the holding company. For the foreign-owned firms the top holder in FDIC data is the foreign parent (e.g. Barclays PLC, Deutsche Bank AG, The Toronto-Dominion Bank, UBS Group AG, Bank of Montreal, HSBC Holdings plc, Royal Bank of Canada); their US insured banks are attributed to the US intermediate holding company named in the task. Non-bank affiliates and uninsured trust companies are outside the call report figures. NSFR disclosures are consolidated at the (intermediate) holding company and include non-bank subsidiaries.</li><li><strong>Structure verified via FDIC BankFind rather than NIC.</strong> The subsidiary list and RSSD IDs were verified against the FDIC BankFind Suite institutions API (fields FED_RSSD, RSSDHCR, NAMEHCR; index of 23 October 2026), not against the FFIEC National Information Center, because NIC serves a CAPTCHA challenge to automated clients. The two draw on the same Federal Reserve structure data, but NIC itself was not consulted.</li></ul><h3>Confidentiality change</h3><ul><li><strong>RC-O items 9 and 9.a become confidential from the 9/30/2026 report date.</strong> The Federal Reserve MDRM data dictionary (downloaded 27 October 2026) carries two entries for RCONG803 and RCONL190: public (Confidentiality = N) through the 6/30/2026 report date and confidential (Confidentiality = Y) from 9/30/2026 onward. Schedule RC-E Memorandum item 1.g (RCONJH83) stays public. The 6/30/2026 report is therefore the last public quarter for the brokered-reciprocal split used here.</li></ul><h3>Firms excluded, not required, or not yet filed</h3><ul><li><strong>DWS USA Corp</strong>: no FDIC-insured depository subsidiary in FDIC BankFind, so no call report figures; shown in the table for completeness.</li></ul><h3>Qualitative NSFR text mentioning reciprocal deposits</h3><ul><li>No disclosure in the set contains narrative text about reciprocal deposits beyond the row-7 label itself.</li></ul><h3>Sources</h3><ul><li><strong>Call reports</strong>: FFIEC CDR Public Data Distribution, bulk download “Call Reports -- Single Period”, 06/30/2026, TSV (<a href="https://cdr.ffiec.gov/public/PWS/DownloadBulkData.aspx">cdr.ffiec.gov/public/PWS/DownloadBulkData.aspx</a>); MDRM codes from the bulk file’s dictionary rows and the Federal Reserve MDRM data dictionary.</li><li><strong>Entity structure</strong>: FDIC BankFind Suite institutions API (<a href="https://api.fdic.gov/banks/institutions">api.fdic.gov/banks/institutions</a>), active institutions, fields FED_RSSD / RSSDHCR / NAMEHCR.</li><li><strong>Wells Fargo &amp; Company</strong>: standalone_nsfr — <a href="https://www.wellsfargo.com/assets/pdf/about/investor-relations/basel-disclosures/2026-q1-q2-nsfr-disclosure.pdf">https://www.wellsfargo.com/assets/pdf/about/investor-relations/basel-disclosures/2026-q1-q2-nsfr-disclosure.pdf</a> (saved as wells_fargo_nsfr_2026q2.pdf)</li><li><strong>Morgan Stanley</strong>: standalone_nsfr — <a href="https://www.morganstanley.com/content/dam/msdotcom/en/about-us-ir/pdf/US_NSFR_Disclosures_06302026.pdf">https://www.morganstanley.com/content/dam/msdotcom/en/about-us-ir/pdf/US_NSFR_Disclosures_06302026.pdf</a> (saved as morgan_stanley_nsfr_2026q2.pdf)</li></ul>
+</section>
+<footer>Data: FFIEC CDR Call Reports (6/30/2026), FDIC BankFind institutions, firms’ NSFR public disclosures (Q1–Q2 2026). Spreadsheet twin: reciprocal_deposits_q2_2026.xlsx. Pipeline and raw files: see README.md in the repository.</footer>
+</main>
+<script>
+(function(){
+  var table = document.getElementById('summary');
+  if (!table) return;
+  var ths = table.querySelectorAll('thead th');
+  ths.forEach(function(th, idx){
+    th.querySelector('button').addEventListener('click', function(){
+      var kind = th.getAttribute('data-kind');
+      var current = th.getAttribute('aria-sort');
+      var dir = current === 'descending' ? 'ascending' : 'descending';
+      if (kind === 'text' && current !== 'ascending' && current !== 'descending') dir = 'ascending';
+      ths.forEach(function(t){ t.removeAttribute('aria-sort'); });
+      th.setAttribute('aria-sort', dir);
+      var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+      rows.sort(function(a, b){
+        var va = a.cells[idx].getAttribute('data-v'), vb = b.cells[idx].getAttribute('data-v');
+        var r;
+        if (kind === 'text') { r = va.localeCompare(vb); }
+        else { r = parseFloat(va) - parseFloat(vb); }
+        return dir === 'ascending' ? r : -r;
+      });
+      rows.forEach(function(r){ table.tBodies[0].appendChild(r); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
