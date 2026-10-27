@@ -132,7 +132,7 @@ set its `status` to `found` and `pdf_file` accordingly, and re-run steps 03-08.
 
 ## Verification (scripts/07_verify.py, full log in data/processed/verification_log.md)
 
-* Fresh CDR bulk file downloaded 2026-10-27T23:13:03+00:00 (5,981,366 bytes).
+* Fresh CDR bulk file downloaded 2026-10-27T23:13:42+00:00 (5,981,366 bytes).
 * Result: all 5 pairs match.
 * Result: all FDIC values match.
 * 120 holding-company totals checked against the sum of their bank rows: all equal.
