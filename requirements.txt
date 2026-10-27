@@ -1,0 +1,6 @@
+# Python 3.11+; only needed to RE-RUN the pipeline (outputs are committed)
+requests>=2.31
+pdfplumber>=0.11
+openpyxl>=3.1
+pandas>=2.0
+playwright>=1.40   # only for scripts/07_verify.py offline-render check

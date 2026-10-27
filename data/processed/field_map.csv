@@ -1,0 +1,12 @@
+field,call_report_item,mdrm_code,bulk_file_description,bulk_file,applies_to,units,note
+reciprocal_deposits_k,"Schedule RC-E, Memorandum item 1.g - Total reciprocal deposits (as of the report date)",RCONJH83,Total reciprocal deposit,FFIEC CDR Call Schedule RCE 06302026.txt,031/041/051,USD thousands as reported,
+brokered_deposits_k,"Schedule RC-E, Memorandum item 1.b - Total brokered deposits",RCON2365,TOTAL BROKERED DEPOSITS,FFIEC CDR Call Schedule RCE 06302026.txt,031/041/051,USD thousands as reported,
+rco9_reciprocal_brokered_k,"Schedule RC-O, item 9 - Reciprocal brokered deposits (included in Schedule RC-E, Memorandum item 1.b)",RCONG803,RECIPROCAL BROKERED DEPOSITS,FFIEC CDR Call Schedule RCO 06302026(1 of 2).txt,031/041/051,USD thousands as reported,becomes confidential from the 9/30/2026 report date (see notes)
+rco9a_fully_insured_reciprocal_brokered_k,"Schedule RC-O, item 9.a - Fully insured reciprocal brokered deposits (included in Schedule RC-O, item 9)",RCONL190,CNSL RECIPROCAL BRKR DEP,FFIEC CDR Call Schedule RCO 06302026(2 of 2).txt,031/041/051,USD thousands as reported,becomes confidential from the 9/30/2026 report date (see notes)
+deposits_domestic_k,"Schedule RC, item 13.a - Deposits in domestic offices (total)",RCON2200,TOTAL DEPOSITS,FFIEC CDR Call Schedule RC 06302026.txt,031/041/051,USD thousands as reported,
+deposits_foreign_k,"Schedule RC, item 13.b - Deposits in foreign offices, Edge and Agreement subsidiaries, and IBFs (total)",RCFN2200,TOTAL DEPOSITS,FFIEC CDR Call Schedule RC 06302026.txt,031 only,USD thousands as reported,blank/zero for FFIEC 041 and 051 filers
+total_assets_consolidated_k,"Schedule RC, item 12 - Total assets (consolidated, FFIEC 031)",RCFD2170,TOTAL ASSETS,FFIEC CDR Call Schedule RC 06302026.txt,031 only,USD thousands as reported,
+total_assets_domestic_k,"Schedule RC, item 12 - Total assets (FFIEC 041/051)",RCON2170,TOTAL ASSETS,FFIEC CDR Call Schedule RC 06302026.txt,041/051,USD thousands as reported,
+total_deposits_k,Derived: Schedule RC item 13.a + 13.b (foreign offices only for FFIEC 031 filers),RCON2200 + RCFN2200,,FFIEC CDR Call Schedule RC 06302026.txt,031/041/051,USD thousands,total deposits including foreign offices
+total_assets_k,"Derived: Schedule RC item 12 (RCFD2170 for FFIEC 031 filers, else RCON2170)",RCFD2170 | RCON2170,,FFIEC CDR Call Schedule RC 06302026.txt,031/041/051,USD thousands,
+filing_form,Bulk POR file - Financial Institution Filing Type,n/a,Financial Institution Filing Type,FFIEC CDR Call Bulk POR 06302026.txt,,,"031, 041 or 051"
