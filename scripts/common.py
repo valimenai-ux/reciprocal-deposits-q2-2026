@@ -65,7 +65,9 @@ def curl(url: str, out: Path, *, extra: list[str] | None = None, timeout: int = 
     cmd = ["curl", "-sS", "-L", "--fail", "--max-time", str(timeout), "-o", str(out), url]
     if extra:
         cmd[1:1] = extra
-    subprocess.run(cmd, check=True)
+    r = subprocess.run(cmd)
+    if r.returncode != 0:              # some hosts reset HTTP/2 streams; retry once over HTTP/1.1
+        subprocess.run(cmd[:1] + ["--http1.1"] + cmd[1:], check=True)
 
 
 def fdic_get(endpoint: str, params: dict, out: Path) -> dict:

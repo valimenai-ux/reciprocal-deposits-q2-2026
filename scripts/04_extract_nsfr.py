@@ -47,21 +47,23 @@ DEBUG = False
 Q2, Q1 = "2026Q2", "2026Q1"
 
 Q_PATTERNS = {
-    Q2: [r"june\s*30,?\s*2026", r"06/30/2026", r"6/30/2026", r"second quarter (of )?2026", r"\b2Q\s?2026", r"\bQ2\s?2026",
-         r"april 1,? (2026 )?(to|through) june 30,? 2026", r"\b2Q26\b", r"30 june 2026", r"jun(e)?[\s-]+2026"],
-    Q1: [r"march\s*31,?\s*2026", r"03/31/2026", r"3/31/2026", r"first quarter (of )?2026", r"\b1Q\s?2026", r"\bQ1\s?2026",
-         r"january 1,? (2026 )?(to|through) march 31,? 2026", r"\b1Q26\b", r"31 march 2026", r"mar(ch)?[\s-]+2026"],
+    Q2: [r"june\s*30,?\s*2026", r"\b0?6/30/(20)?26\b", r"second quarter (of )?2026", r"\b2Q\s?2026", r"\bQ2\s?2026",
+         r"april 1,? (2026 )?(to|through) june 30,? 2026", r"\b2Q\s?['\u2019]?26\b", r"\bQ2\s?['\u2019]?26\b", r"30 june 2026", r"jun(e)?[\s-]+2026"],
+    Q1: [r"march\s*31,?\s*2026", r"\b0?3/31/(20)?26\b", r"first quarter (of )?2026", r"\b1Q\s?2026", r"\bQ1\s?2026",
+         r"january 1,? (2026 )?(to|through) march 31,? 2026", r"\b1Q\s?['\u2019]?26\b", r"\bQ1\s?['\u2019]?26\b", r"31 march 2026", r"mar(ch)?[\s-]+2026"],
 }
 
-ROW7_RE = re.compile(r"sweep\s+deposits,?\s+brokered\s+reciprocal\s+deposits", re.I)
+ROW7_RE = re.compile(r"sweep\s+deposits,?\s+brokered(?:\s+reciprocal(?:\s+deposits)?)?", re.I)
 RETAIL_RE = re.compile(r"^\s*\(?(\d{1,2}\)?[\.\)]?\s+)?(total\s+)?retail\s+funding\b", re.I)
 TOTAL_ASF_RE = re.compile(r"^\s*\(?(\d{1,2}\)?[\.\)]?\s+)?total\s+(available\s+stable\s+funding|asf)(?![a-z])", re.I)
-NSFR_RE = re.compile(r"net\s+stable\s+funding\s+ratio|nsfr\s+stable\s+funding\s+ratio|^\s*\(?40\)?[\.\)]?\s+[A-Za-z (]*ratio", re.I)
+NSFR_RE = re.compile(r"net\s+stable\s+funding\s+ratio|nsfr\s+stable\s+funding\s+ratio|^\s*\(?40\)?[\.\)]?\s+[A-Za-z (]*ratio|^\s*40\s+(?=[\d\.]+\s?%\s*$)", re.I)
+NSFR_NARRATIVE_RE = re.compile(r"average\s+(?:daily\s+)?(?:reduced\s+)?NSFR\s+(?:of|was)\s+(\d{2,3}(?:\.\d+)?)\s?%", re.I)
 ROWSTART_RE = re.compile(r"^\s*\(?\d{1,2}\)?[\.\)]?\s+[A-Za-z(]")
-NUM_RE = re.compile(r"\(?\$?\d{1,3}(?:[,\.]\d{3})+\)?|\(?\$?\d+(?:\.\d+)?%?\)?|(?<![\w/])[-–—](?![\w/])")
+NUM_RE = re.compile(r"\(?\$?\d{1,3}(?:,\d{3})+(?:\.\d+)?\)?|\(?\$?\d{1,3}(?:\.\d{3})+\)?|\(?\$?\d+(?:\.\d+)?%?\)?|(?<![\w/])[-–—](?![\w/])")
 OCR_VARIANTS = [(400, 4), (300, 4), (400, 6), (600, 6), (300, 6)]
 KEYS = {"std": ["open", "lt6m", "m6_1y", "ge1y", "weighted"],
-        "perp": ["open", "lt6m", "m6_1y", "ge1y", "perpetual", "weighted"]}
+        "perp": ["open", "lt6m", "m6_1y", "ge1y", "perpetual", "weighted"],
+        "unspec_perp": ["unspecified", "open", "lt6m", "m6_1y", "ge1y", "perpetual", "weighted"]}
 
 
 def numbers_in(s: str) -> list[float]:
@@ -74,8 +76,10 @@ def numbers_in(s: str) -> list[float]:
             continue
         neg = t.startswith("(") and t.endswith(")")
         t = t.strip("()$%")
-        if re.fullmatch(r"\d{1,3}(?:[,\.]\d{3})+", t):
-            t = re.sub(r"[,\.]", "", t)
+        if "," in t:                                   # 1,810.05 -> comma = thousands, point = decimal
+            t = t.replace(",", "")
+        elif re.fullmatch(r"\d{1,3}(?:\.\d{3})+", t):   # 134.934 (OCR artefact for 134,934)
+            t = t.replace(".", "")
         try:
             v = float(t)
         except ValueError:
@@ -104,13 +108,22 @@ def tokens_pos(line: str, start: int = 0) -> list[tuple[int, float]]:
     seg = line[start:]
     seg = re.sub(r"\(\d\)", lambda m: " " * len(m.group(0)), seg)            # footnote markers
     seg = re.sub(r"(\d)\s+,\s*(\d{3})", lambda m: m.group(1) + "," + m.group(2), seg)   # "1 ,312,393"
-    seg = re.sub(r"^(\s*)\d(?=\s)", lambda m: m.group(1) + " ", seg)          # footnote digit glued to label
+    if start > 0 and line[start - 1].isalpha() and seg[:1].isdigit() and not seg[1:2].isdigit():
+        seg = " " + seg[1:]                                                    # footnote digit glued to the label ("ASF1 1,351,857")
     out = []
     for m in NUM_RE.finditer(seg):
         vals = numbers_in(m.group(0))
         if vals:
             out.append((start + m.start(), vals[0]))
     return out
+
+
+def drop_row_number(toks: list[tuple[int, float]], want: int | None) -> list[tuple[int, float]]:
+    """A numeric continuation line may start with the template row number ("7   5,006  2,844 ...")."""
+    if toks and toks[0][0] <= 14 and float(toks[0][1]).is_integer() and 1 <= toks[0][1] <= 45:
+        if (want and len(toks) == want + 1) or (not want and len(toks) in (6, 7, 8) and toks[0][1] in (4, 7)):
+            return toks[1:]
+    return toks
 
 
 def row_tail(lines: list[str], idx: int, end: int, aligned: bool = False, want: int | None = None) -> tuple[list[float], str]:
@@ -124,22 +137,28 @@ def row_tail(lines: list[str], idx: int, end: int, aligned: bool = False, want: 
     own = tokens_pos(lines[idx], end)
     raw = [lines[idx]]
     need = want or 5
-    if len(own) >= need:
+    if len(own) >= need or (len(own) >= 2 and len(own) >= need - 1):
         return [v for _, v in own], lines[idx]
     nxt: list[tuple[int, float]] = []
     j = idx + 1
     while j < len(lines) and j <= idx + 2 and numeric_line(lines[j]):
-        nxt += tokens_pos(lines[j]); raw.append(lines[j]); j += 1
-    if not nxt:   # wrapped label: the numbers may follow the label's continuation line
+        nxt += drop_row_number(tokens_pos(lines[j]), want); raw.append(lines[j]); j += 1
+    if not nxt:   # wrapped label: the numbers may follow one or two label-continuation lines
         j = idx + 1
-        while j < len(lines) and j <= idx + 2 and not ROWSTART_RE.match(lines[j]) and not numeric_line(lines[j]):
+        while j < len(lines) and j <= idx + 3:
+            ln = lines[j]
+            if numeric_line(ln):
+                nxt += drop_row_number(tokens_pos(ln), want); raw.append(ln); break
+            words = re.findall(r"[A-Za-z][A-Za-z'\u2019,]+", ln)
             lastw = None
-            for lastw in re.finditer(r"[A-Za-z%:'\u2019]{2,}", lines[j]):
+            for lastw in re.finditer(r"[A-Za-z%:'\u2019,]{2,}", ln):
                 pass
-            cand = tokens_pos(lines[j], lastw.end() if lastw else 0)
-            if len(cand) >= 2:
-                nxt += cand; raw.append(lines[j]); break
-            j += 1
+            cand = tokens_pos(ln, lastw.end() if lastw else 0)
+            if len(cand) >= 2:                       # continuation line that ends with the numbers
+                nxt += cand; raw.append(ln); break
+            if len(words) >= 2 and len(tokens_pos(ln)) <= 1:   # pure label continuation (maybe with the row number)
+                raw.append(ln); j += 1; continue
+            break
     prv = tokens_pos(lines[idx - 1]) if idx > 0 and numeric_line(lines[idx - 1]) and len(own) + len(nxt) < need else []
     if prv:
         raw.insert(0, lines[idx - 1])
@@ -155,7 +174,7 @@ def detect_quarters(text: str) -> list[str]:
     t = text.lower()
     found = []
     for q, pats in Q_PATTERNS.items():
-        pos = [m.start() for p in pats for m in [re.search(p, t)] if m]
+        pos = [m.start() for p in pats for m in [re.search(p, t, re.I)] if m]
         if pos:
             found.append((min(pos), q))
     return [q for _, q in sorted(found)]
@@ -166,14 +185,14 @@ def nearest_quarter(text_before: str, default: str) -> str:
     best = (-1, default)
     for q, pats in Q_PATTERNS.items():
         for p in pats:
-            for m in re.finditer(p, t):
+            for m in re.finditer(p, t, re.I):
                 if m.start() > best[0]:
                     best = (m.start(), q)
     return best[1]
 
 
 def split_columns(nums: list[float], nq: int, hint: str) -> list[dict] | None:
-    order = ["perp", "std"] if hint == "perp" else ["std", "perp"]
+    order = [hint] + [k for k in KEYS if k != hint]
     for layout in order:
         k = KEYS[layout]
         if nq == 2 and len(nums) == 2 * len(k):
@@ -208,7 +227,8 @@ def page_candidates(pdf_path: Path) -> list[tuple[int, list[tuple[str, str]]]]:
         for i, p in enumerate(pdf.pages, start=1):
             text = p.extract_text() or ""
             cands = [("text", text), ("pdftotext", pdftotext_page(pdf_path, i))]
-            big_image = any((im["x1"] - im["x0"]) * (im["bottom"] - im["top"]) > 0.3 * float(p.width) * float(p.height) for im in p.images)
+            img_area = sum((im["x1"] - im["x0"]) * (im["bottom"] - im["top"]) for im in p.images)
+            big_image = img_area > 0.25 * float(p.width) * float(p.height) or (p.images and len(p.chars) < 400)
             if big_image and not any(ROW7_RE.search(t) or RETAIL_RE.search(t) for _, t in cands):
                 for dpi, psm in OCR_VARIANTS:
                     try:
@@ -222,7 +242,7 @@ def page_candidates(pdf_path: Path) -> list[tuple[int, list[tuple[str, str]]]]:
     return out
 
 
-def parse_text(text: str, qs: list[str], hint: str, aligned: bool = False) -> dict:
+def parse_text(text: str, qs: list[str], hint: str, aligned: bool = False, strict: bool = False) -> dict:
     """{quarter: {field: value}} for the rows found in one page text."""
     found: dict[str, dict] = {}
     lines = text.splitlines()
@@ -242,9 +262,14 @@ def parse_text(text: str, qs: list[str], hint: str, aligned: bool = False) -> di
         if m7 or mr:
             prefix, m = ("row7", m7) if m7 else ("retail", mr)
             nums, raw = row_tail(lines, idx, m.end(), aligned, ncols)
-            if ncols and len(nums) not in (ncols, 2 * ncols):
+            if prefix == "retail" and ncols is None:
+                continue                                   # template rows come together: no row 7 on this page, skip
+            allowed = () if not ncols else ((ncols, 2 * ncols) if strict else (ncols - 1, ncols, ncols + 1, 2 * ncols))
+            if ncols and len(nums) not in allowed:      # OCR text must match the row-7 column count exactly
                 if DEBUG:
                     log(f"      ? {prefix}: {len(nums)} numbers but row 7 had {ncols}: {raw!r}")
+                continue
+            if re.search(r"\b\d \d \d\b", raw):              # spaced-out digits (garbled text layer)
                 continue
             nq = 2 if (len(qs) == 2 and len(nums) in (10, 12)) else 1
             cols = split_columns(nums, nq, hint)
@@ -261,13 +286,20 @@ def parse_text(text: str, qs: list[str], hint: str, aligned: bool = False) -> di
                 d[f"{prefix}_raw_line"] = " ".join(raw.split())[:300]
         elif TOTAL_ASF_RE.search(line):
             m = TOTAL_ASF_RE.search(line)
+            after = re.sub(r"\([a-z0-9]\)|[:|*?'\u2019\]\)$]", " ", line[m.end():])
+            lead = re.split(r"\d", after, maxsplit=1)[0]
+            if re.search(r"[A-Za-z]{2,}", lead):
+                continue                                   # narrative sentence, not the table row
             nums = [n for n in numbers_in(tail_after(line, m.end())) if n]
             if not nums and idx + 1 < len(lines) and not re.search(r"[A-Za-z]{4}", lines[idx + 1]):
                 nums = [n for n in numbers_in(lines[idx + 1]) if n]
             if not nums:
                 continue
-            if len(qs) == 2 and len(nums) >= 2:
-                pairs = list(zip(qs, nums[-2:]))
+            has_rownum = bool(re.match(r"^\s*\(?15\)?[\.\)]?\s", line))   # template row 15 -> one quarter's table
+            if len(qs) == 2 and len(nums) == 2 and not has_rownum:
+                pairs = list(zip(qs, nums))                # summary table: one weighted total per quarter
+            elif len(qs) == 2 and len(nums) > 2 and not has_rownum:
+                continue                                   # multi-column summary (unweighted/weighted x quarters): ambiguous
             else:
                 q = nearest_quarter("\n".join(lines[:idx]), qs[0]) if len(qs) > 1 else qs[0]
                 pairs = [(q, nums[-1])]
@@ -275,8 +307,18 @@ def parse_text(text: str, qs: list[str], hint: str, aligned: bool = False) -> di
                 d = found.setdefault(q, {})
                 d.setdefault("total_asf_weighted", v)
                 d.setdefault("total_asf_raw_line", " ".join(line.split())[:300])
+        elif NSFR_NARRATIVE_RE.search(line):
+            m = NSFR_NARRATIVE_RE.search(line)
+            q = nearest_quarter("\n".join(lines[:idx]) + "\n" + line[:m.start()], qs[0]) if len(qs) > 1 else qs[0]
+            d = found.setdefault(q, {})
+            d.setdefault("nsfr_ratio_pct", float(m.group(1)))
+            d.setdefault("nsfr_ratio_raw_line", " ".join(line.split())[:300])
         elif NSFR_RE.search(line):
             m = NSFR_RE.search(line)
+            after = re.sub(r"\(\s*%\s*\)|\([a-z0-9]\)|[:|*?'\u2019\]\)]", " ", line[m.end():])
+            lead = re.split(r"\d", after, maxsplit=1)[0]
+            if re.search(r"[A-Za-z]", lead):
+                continue   # narrative sentence ("...ratio (NSFR) minimum requirement of 100%"), not the table row
             vals = [v for v in numbers_in(tail_after(line, m.end())) if 50 <= v <= 400]
             if not vals and idx + 1 < len(lines) and not re.search(r"[A-Za-z]{4}", lines[idx + 1]):
                 vals = [v for v in numbers_in(lines[idx + 1]) if 50 <= v <= 400]
@@ -294,7 +336,7 @@ def parse_text(text: str, qs: list[str], hint: str, aligned: bool = False) -> di
     return found
 
 
-GROUPS = {"row7": [f"row7_{k}" for k in KEYS["perp"]], "retail": [f"retail_{k}" for k in KEYS["perp"]],
+GROUPS = {"row7": [f"row7_{k}" for k in KEYS["unspec_perp"]], "retail": [f"retail_{k}" for k in KEYS["unspec_perp"]],
           "total_asf": ["total_asf_weighted"], "nsfr": ["nsfr_ratio_pct"]}
 
 
@@ -309,9 +351,12 @@ def vote(cands_found: list[tuple[str, dict]], q: str) -> dict:
                 tuples.append((tuple(d.get(f) for f in fields), method, d))
         if not tuples:
             continue
-        counts = Counter(t for t, _, _ in tuples)
+        text_t = [(t, m, d) for t, m, d in tuples if m in ("text", "pdftotext")]
+        pool = text_t or tuples                            # a text layer always beats OCR
+        counts = Counter(t for t, _, _ in pool)
         best, n = counts.most_common(1)[0]
-        method, d = next((m, d) for t, m, d in tuples if t == best)
+        method, d = next((m, d) for t, m, d in pool if t == best)
+        tuples = pool
         for f, v in zip(fields, best):
             if v is not None:
                 merged[f] = v
@@ -357,13 +402,15 @@ def extract_pdf(src: dict, overrides: dict) -> tuple[list[dict], list[dict]]:
         qs = ov.get("page_quarters", {}).get(str(page_no)) or detect_quarters(text0)
         if isinstance(qs, str):
             qs = [qs]
-        hint = ov.get("layout") or ("perp" if re.search(r"perpetual|erpetual", text0, re.I) else "std")
+        hint = ov.get("layout") or ("unspec_perp" if re.search(r"unspecified\s+maturity", text0, re.I)
+                                    else "perp" if re.search(r"perpetual|erpetual", text0, re.I) else "std")
         if DEBUG:
             hits = [l for l in text0.splitlines() if ROW7_RE.search(l) or RETAIL_RE.search(l) or TOTAL_ASF_RE.search(l) or NSFR_RE.search(l)]
             log(f"  [{slug} p{page_no} {','.join(c[0] for c in cands)}] quarters={qs} hint={hint} hits={hits[:5]}")
         if not qs:
             continue
-        cands_found = [(method, parse_text(text, qs, hint, aligned=(method == "pdftotext"))) for method, text in cands]
+        cands_found = [(method, parse_text(text, qs, hint, aligned=(method == "pdftotext"), strict=method.startswith("ocr")))
+                       for method, text in cands]
         for q in (Q2, Q1):
             merged = vote(cands_found, q)
             for k, v in merged.items():
@@ -386,8 +433,8 @@ def extract_pdf(src: dict, overrides: dict) -> tuple[list[dict], list[dict]]:
 
 
 COLS = ["hc_slug", "firm", "quarter", "pdf_file", "units",
-        "row7_open", "row7_lt6m", "row7_m6_1y", "row7_ge1y", "row7_perpetual", "row7_weighted", "row7_page", "row7_method", "row7_raw_line",
-        "retail_open", "retail_lt6m", "retail_m6_1y", "retail_ge1y", "retail_perpetual", "retail_weighted", "retail_page", "retail_method", "retail_raw_line",
+        "row7_unspecified", "row7_open", "row7_lt6m", "row7_m6_1y", "row7_ge1y", "row7_perpetual", "row7_weighted", "row7_page", "row7_method", "row7_raw_line",
+        "retail_unspecified", "retail_open", "retail_lt6m", "retail_m6_1y", "retail_ge1y", "retail_perpetual", "retail_weighted", "retail_page", "retail_method", "retail_raw_line",
         "total_asf_weighted", "total_asf_page", "total_asf_method", "total_asf_raw_line",
         "nsfr_ratio_pct", "nsfr_page", "nsfr_method", "nsfr_ratio_raw_line"]
 
@@ -413,8 +460,8 @@ def main() -> None:
         all_rows += rows
         all_mentions += mentions
         for r in rows:
-            log(f"{s['hc_slug']:20s} {r['quarter']} row7={[r.get(f'row7_{k}') for k in KEYS['perp']]} p{r.get('row7_page')} {r.get('row7_method','')} "
-                f"| retail={[r.get(f'retail_{k}') for k in KEYS['perp']]} | ASF={r.get('total_asf_weighted')} | NSFR={r.get('nsfr_ratio_pct')} ({r.get('nsfr_method','')})")
+            log(f"{s['hc_slug']:20s} {r['quarter']} row7={[r.get(f'row7_{k}') for k in KEYS['unspec_perp']]} p{r.get('row7_page')} {r.get('row7_method','')} "
+                f"| retail={[r.get(f'retail_{k}') for k in KEYS['unspec_perp']]} | ASF={r.get('total_asf_weighted')} ({r.get('total_asf_method','')}) | NSFR={r.get('nsfr_ratio_pct')} ({r.get('nsfr_method','')})")
     for r in all_rows:
         for c in COLS:
             r.setdefault(c, "")

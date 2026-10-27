@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +28,7 @@ def main() -> None:
     ap.add_argument("--force", action="store_true", help="re-download even if the file exists")
     args = ap.parse_args()
     rows = read_csv(PROCESSED / "sources.csv")
+    failed: list[str] = []
     for r in rows:
         if r["status"] != "found" or not r.get("disclosure_url"):
             continue
@@ -35,7 +37,15 @@ def main() -> None:
         out = RAW_NSFR / r["pdf_file"]
         if args.force or not out.exists():
             log(f"downloading {r['hc_slug']}: {r['disclosure_url']}")
-            curl(r["disclosure_url"], out)
+            try:
+                curl(r["disclosure_url"], out)
+            except subprocess.CalledProcessError as e:
+                out.unlink(missing_ok=True)
+                r["download_status"] = f"download failed (curl exit {e.returncode})"
+                log(f"  FAILED for {r['hc_slug']}: curl exit {e.returncode} - the host did not serve the file to an automated client")
+                failed.append(r["hc_slug"])
+                continue
+        r["download_status"] = "downloaded"
         digest = sha256_file(out)
         with open(out, "rb") as fh:
             head = fh.read(5)
@@ -49,9 +59,11 @@ def main() -> None:
         r["pages"] = str(n)
         log(f"  {out.name}: {out.stat().st_size:,} bytes, {n} pages, sha256 {digest[:12]}...")
     cols = list(rows[0].keys())
-    if "pages" not in cols:
-        cols.append("pages")
+    for c in ("pages", "download_status"):
+        if c not in cols:
+            cols.append(c)
     write_csv(PROCESSED / "sources.csv", rows, cols)
+    log(f"done; failed downloads: {failed or 'none'}")
 
 
 if __name__ == "__main__":

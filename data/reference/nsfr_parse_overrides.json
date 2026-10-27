@@ -1,0 +1,49 @@
+{
+  "dws_usa": {
+    "_comment": "DWS USA Corporation's template omits ASF rows 3-8 (retail funding) because the firm has no retail funding; row 7 is therefore nil. Values read from the page-8 table image (the table is an embedded image) and the page-5 text summary.",
+    "manual": {
+      "2026Q2": {
+        "row7_open": 0,
+        "row7_lt6m": 0,
+        "row7_m6_1y": 0,
+        "row7_ge1y": 0,
+        "row7_perpetual": 0,
+        "row7_weighted": 0,
+        "row7_page": 8,
+        "row7_method": "not presented: template omits retail funding rows 3-8 (no retail funding); nil",
+        "retail_open": 0,
+        "retail_lt6m": 0,
+        "retail_m6_1y": 0,
+        "retail_ge1y": 0,
+        "retail_perpetual": 0,
+        "retail_weighted": 0,
+        "retail_page": 8,
+        "retail_method": "not presented: template omits retail funding rows 3-8 (no retail funding); nil",
+        "nsfr_ratio_pct": 123.72,
+        "nsfr_page": 8,
+        "nsfr_method": "manual: row 39 of the page-8 table image (OCR reads 123.72%; equals Total ASF 1,810.05 / Total adjusted RSF 1,463.01)"
+      },
+      "2026Q1": {
+        "row7_open": 0,
+        "row7_lt6m": 0,
+        "row7_m6_1y": 0,
+        "row7_ge1y": 0,
+        "row7_perpetual": 0,
+        "row7_weighted": 0,
+        "row7_page": 8,
+        "row7_method": "not presented: template omits retail funding rows 3-8 (no retail funding); nil",
+        "retail_open": 0,
+        "retail_lt6m": 0,
+        "retail_m6_1y": 0,
+        "retail_ge1y": 0,
+        "retail_perpetual": 0,
+        "retail_weighted": 0,
+        "retail_page": 8,
+        "retail_method": "not presented: template omits retail funding rows 3-8 (no retail funding); nil",
+        "nsfr_ratio_pct": 122.83,
+        "nsfr_page": 8,
+        "nsfr_method": "manual: row 39 of the page-8 table image (OCR variant psm4 reads 122.83%; equals Total ASF 1,786.21 / Total adjusted RSF 1,454.27)"
+      }
+    }
+  }
+}

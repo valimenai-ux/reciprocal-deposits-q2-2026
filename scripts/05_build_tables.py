@@ -44,10 +44,10 @@ def main() -> None:
     nsfr_rows = []
     nsfr_by = {}
     for r in nsfr_x:
-        buckets = [fnum(r.get(f"row7_{k}")) for k in ("open", "lt6m", "m6_1y", "ge1y", "perpetual")]
-        rbuckets = [fnum(r.get(f"retail_{k}")) for k in ("open", "lt6m", "m6_1y", "ge1y", "perpetual")]
-        row7_unw = sum(b for b in buckets if b is not None) if any(b is not None for b in buckets[:4]) else None
-        retail_unw = sum(b for b in rbuckets if b is not None) if any(b is not None for b in rbuckets[:4]) else None
+        buckets = [fnum(r.get(f"row7_{k}")) for k in ("unspecified", "open", "lt6m", "m6_1y", "ge1y", "perpetual")]
+        rbuckets = [fnum(r.get(f"retail_{k}")) for k in ("unspecified", "open", "lt6m", "m6_1y", "ge1y", "perpetual")]
+        row7_unw = sum(b for b in buckets if b is not None) if any(b is not None for b in buckets[1:5]) else None
+        retail_unw = sum(b for b in rbuckets if b is not None) if any(b is not None for b in rbuckets[1:5]) else None
         d = dict(r)
         d["row7_unweighted_total"] = row7_unw
         d["retail_unweighted_total"] = retail_unw

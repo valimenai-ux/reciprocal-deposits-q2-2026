@@ -23,6 +23,10 @@ from openpyxl import Workbook  # noqa: E402
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side  # noqa: E402
 from openpyxl.utils import get_column_letter  # noqa: E402
 
+STATUS_TEXT = {"found": "found", "found_not_retrievable": "published; not retrievable by automated client (see notes)",
+               "not_found": "not yet filed / not found", "not_required": "not required (no NSFR requirement in Q2 2026)"}
+STATUS_SHORT = {"found": "found", "found_not_retrievable": "published, not retrievable", "not_found": "not filed / not found", "not_required": "not required"}
+
 HTML_OUT = OUTPUT / "reciprocal_deposits_q2_2026.html"
 XLSX_OUT = OUTPUT / "reciprocal_deposits_q2_2026.xlsx"
 
@@ -162,11 +166,12 @@ def build_html(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
         for key, _, _, kind in cols:
             v = r.get(key, "")
             if key == "hc_name":
-                cell = f'<div class="hc">{esc(name_of(r))}</div><div class="cat">{esc(r["category"])}</div>'
+                cat = r.get("category_verified") or r["category"]
+                cell = f'<div class="hc">{esc(name_of(r))}</div><div class="cat" title="Verified tailoring category (brief: {esc(r["category"])})">Cat. {esc(cat)}</div>'
                 tds.append(f'<td data-v="{esc(r["hc_name"])}">{cell}</td>')
             elif key == "nsfr_status":
-                txt = {"found": "found", "not_found": "not yet filed / not found", "not_required": "not required"}.get(v, v or "–")
-                tds.append(f'<td data-v="{esc(txt)}" class="txt">{esc(txt)}</td>')
+                txt = STATUS_SHORT.get(v, v or "–")
+                tds.append(f'<td data-v="{esc(txt)}" class="txt" title="{esc(STATUS_TEXT.get(v, v))}">{esc(txt)}</td>')
             elif kind == "bn":
                 x = f(v)
                 tds.append(f'<td data-v="{x if x is not None else -1}" class="num">{bn(v)}</td>')
@@ -195,7 +200,7 @@ def build_html(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
         items = "".join(f"<li><strong>{esc(n['title'])}.</strong> {esc(n['text'])}</li>" for n in sorted(note_items(sec), key=lambda n: int(n["order"])))
         sections.append(f"<h3>{esc(sec)}</h3><ul>{items}</ul>")
     # firms excluded / not filed
-    exc = "".join(f"<li><strong>{esc(s['firm'])}</strong>: {esc({'not_found': 'not yet filed / not found', 'not_required': 'not required'}.get(s['status'], s['status']))}. {esc(s.get('notes', ''))}</li>" for s in nsfr_other)
+    exc = "".join(f"<li><strong>{esc(s['firm'])}</strong>: {esc(STATUS_TEXT.get(s['status'], s['status']))}. {esc(s.get('notes', ''))}</li>" for s in nsfr_other)
     no_bank = [r for r in summary if f(r.get("reciprocal_deposits_musd")) is None]
     exc += "".join(f"<li><strong>{esc(r['hc_name'])}</strong>: no FDIC-insured depository subsidiary in FDIC BankFind, so no call report figures; shown in the table for completeness.</li>" for r in no_bank)
     sections.append(f"<h3>Firms excluded, not required, or not yet filed</h3><ul>{exc or '<li>none</li>'}</ul>")
@@ -206,6 +211,10 @@ def build_html(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
     else:
         li = "<li>No disclosure in the set contains narrative text about reciprocal deposits beyond the row-7 label itself.</li>"
     sections.append(f"<h3>Qualitative NSFR text mentioning reciprocal deposits</h3><ul>{li}</ul>")
+    # open items
+    open_items = read_csv(PROCESSED / "open_items.csv") if (PROCESSED / "open_items.csv").exists() else []
+    if open_items:
+        sections.append("<h3>Open items and judgment calls</h3><ol>" + "".join(f"<li><strong>{esc(o['item'])}.</strong> {esc(o['detail'])}</li>" for o in open_items) + "</ol>")
     # sources
     src_li = "".join(f"<li><strong>{esc(s['firm'])}</strong>: {esc(s.get('document_type', ''))}{' — ' if s.get('disclosure_url') else ''}"
                      f"{('<a href=\"' + esc(s['disclosure_url']) + '\">' + esc(s['disclosure_url']) + '</a>') if s.get('disclosure_url') else ''}"
@@ -326,7 +335,7 @@ footer {{ color: var(--muted); font-size: 12px; margin-top: 12px; }}
   <div class="kpi"><div class="label">Total reciprocal deposits (call report, sum of insured subs)</div><div class="value">${total / 1000:,.1f}bn</div></div>
   <div class="kpi"><div class="label">Share of the set’s total deposits</div><div class="value">{total / dep_total * 100:.2f}%</div></div>
   <div class="kpi"><div class="label">Holding companies reporting any reciprocal deposits</div><div class="value">{n_pos} of {len(with_cr)}</div></div>
-  <div class="kpi"><div class="label">Q1–Q2 2026 NSFR disclosures located</div><div class="value">{len(nsfr_found)} of {len(sources)}</div></div>
+  <div class="kpi"><div class="label">Q1–Q2 2026 NSFR disclosures parsed</div><div class="value">{len(nsfr_found)} of {len(sources)}</div><div class="label">{sum(1 for s in sources if s['status'] == 'found_not_retrievable')} more published but not retrievable; {sum(1 for s in sources if s['status'] in ('not_required', 'not_found'))} not required / not filed</div></div>
 </div>
 </section>
 
@@ -392,7 +401,7 @@ def build_xlsx(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
     # ---- Summary
     ws = wb.active
     ws.title = "Summary"
-    cols = [("hc_name", "Holding company"), ("hc_legal_name", "Legal name"), ("category", "Category"),
+    cols = [("hc_name", "Holding company"), ("hc_legal_name", "Legal name"), ("category", "Category (brief)"), ("category_verified", "Category (verified, Q2 2026)"),
             ("n_insured_subs", "Insured bank subs (#)"), ("highlight", "Highlight"),
             ("reciprocal_deposits_musd", "Reciprocal deposits ($m)"), ("reciprocal_pct_of_deposits", "Reciprocal % of deposits"),
             ("rank_reciprocal_usd", "Rank ($)"), ("rank_reciprocal_pct", "Rank (%)"),
@@ -492,12 +501,12 @@ def build_xlsx(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
     # ---- Sources
     ws = wb.create_sheet("Sources")
     scols = [("firm", "Firm"), ("status", "Status"), ("document_type", "Document type"), ("disclosure_url", "Disclosure URL"), ("landing_page_url", "Landing page"),
-             ("pdf_file", "Saved as (data/raw/nsfr/)"), ("pages", "Pages"), ("sha256", "SHA-256"), ("units", "Units"), ("notes", "Notes")]
+             ("pdf_file", "Saved as (data/raw/nsfr/)"), ("pages", "Pages"), ("sha256", "SHA-256"), ("download_status", "Download status"), ("units", "Units"), ("notes", "Notes"), ("urls_checked", "URLs checked")]
     rows = [[s.get(k, "") for k, _ in scols] for s in sources]
     rows += [[], ["Call reports", "used", "FFIEC CDR bulk download, Call Reports -- Single Period, 06/30/2026, TSV", "https://cdr.ffiec.gov/public/PWS/DownloadBulkData.aspx", "", "data/raw/call_reports/FFIEC_CDR_Call_Bulk_All_Schedules_06302026.zip", "", "", "USD thousands", "MDRM codes in data/processed/field_map.csv"],
              ["Entity structure", "used", "FDIC BankFind Suite institutions API (active institutions; FED_RSSD, RSSDHCR, NAMEHCR)", "https://api.fdic.gov/banks/institutions", "https://api.fdic.gov/banks/docs/", "data/raw/fdic/", "", "", "", "NIC not used (CAPTCHA to automated clients)"],
              ["MDRM dictionary", "used", "Federal Reserve Micro Data Reference Manual, CSV download", "https://www.federalreserve.gov/apps/mdrm/pdf/MDRM.zip", "https://www.federalreserve.gov/apps/mdrm/", "data/raw/mdrm/mdrm_items_extract.csv", "", "", "", "item names and confidentiality windows"]]
-    sheet(ws, [h for _, h in scols], rows, None, {"Firm": 30, "Document type": 22, "Disclosure URL": 80, "Landing page": 50, "Saved as (data/raw/nsfr/)": 34, "SHA-256": 20, "Notes": 50})
+    sheet(ws, [h for _, h in scols], rows, None, {"Firm": 30, "Document type": 22, "Disclosure URL": 80, "Landing page": 50, "Saved as (data/raw/nsfr/)": 34, "SHA-256": 20, "Notes": 60, "URLs checked": 60})
     ws.append([]); ws.append(["Field map (call report items)"])
     ws.append(list(field_map[0].keys()))
     for r in field_map:
@@ -505,7 +514,9 @@ def build_xlsx(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
 
     # ---- Notes
     ws = wb.create_sheet("Notes")
-    sheet(ws, ["Section", "Title", "Text"], [[n["section"], n["title"], n["text"]] for n in notes], None, {"Section": 28, "Title": 44, "Text": 120})
+    open_items = read_csv(PROCESSED / "open_items.csv") if (PROCESSED / "open_items.csv").exists() else []
+    sheet(ws, ["Section", "Title", "Text"], [[n["section"], n["title"], n["text"]] for n in notes] + [["Open items", o["item"], o["detail"]] for o in open_items],
+          None, {"Section": 28, "Title": 44, "Text": 120})
     for i in range(2, ws.max_row + 1):
         ws[f"C{i}"].alignment = Alignment(wrap_text=True, vertical="top")
     OUTPUT.mkdir(parents=True, exist_ok=True)
@@ -514,6 +525,10 @@ def build_xlsx(summary, banks, nsfr, sources, notes, mentions, field_map, entiti
 
 def main() -> None:
     summary = read_csv(PROCESSED / "summary.csv")
+    from common import holding_companies
+    hc = {h["hc_slug"]: h for h in holding_companies()}
+    for r in summary:
+        r["category_verified"] = hc.get(r["hc_slug"], {}).get("category_verified", "")
     banks = read_csv(PROCESSED / "bank_detail.csv")
     nsfr = read_csv(PROCESSED / "nsfr_detail.csv") if (PROCESSED / "nsfr_detail.csv").exists() else []
     sources = read_csv(PROCESSED / "sources.csv")
